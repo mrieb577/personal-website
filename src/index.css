@@ -1,0 +1,10 @@
+:root {
+    --bg: darkolivegreen;
+    --widget-outline: darkolivegreen;
+    --app-font: 'Courier New', Courier, monospace;
+}
+
+body{
+    font-family: var(--app-font);
+    background-color: var(--bg);
+}

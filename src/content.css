@@ -1,0 +1,9 @@
+h4, p{
+    margin: 0px;
+}
+
+.content-container{
+    display: grid;
+    grid-template-columns: 300px 1fr 150px;
+    gap: 5px;
+}
