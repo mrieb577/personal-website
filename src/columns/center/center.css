@@ -1,0 +1,33 @@
+button{
+    font-family: var(--app-font);
+    width: 100px;
+    height: 25px;
+
+    border-color: var(--widget-outline);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.data{
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    margin-top: 10px;
+}
+
+.found {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.logout {
+    float: right;
+}
+
+.trackName{
+    padding-left: 10px;
+}
