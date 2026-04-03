@@ -1,3 +1,8 @@
+.obsessions {
+    max-height: 500px;
+    overflow: scroll;
+}
+
 button{
     font-family: var(--app-font);
     width: 100px;
@@ -19,15 +24,11 @@ ul {
     margin-top: 10px;
 }
 
-.found {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-}
-
 .logout {
     float: right;
 }
 
 .trackName{
     padding-left: 10px;
+    overflow-x: clip;
 }

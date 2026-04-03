@@ -1,6 +1,9 @@
+import { AboutMe } from "./left/about-me";
+import { AboutSite } from "./left/about-site";
+
 export function Left() {
-    return (<div className='column'>
-        <h4>Links</h4>
-        <p>some cool sites you should see</p>
+    return (<div>
+        <AboutMe />
+        <AboutSite />
     </div>)
 }
