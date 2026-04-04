@@ -28,6 +28,18 @@ ul {
     float: right;
 }
 
+.listheader{
+    white-space: nowrap;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 30px;
+    align-items: center;
+}
+
+.export {
+    justify-self: end;
+}
+
 .trackName{
     padding-left: 10px;
     overflow-x: clip;

@@ -15,6 +15,7 @@ export function SpotifyObsessions() {
     const [get_vals] = useSearchParams();
 
     const [tracks, setTracks] = useState([]);
+    const [selected, setSelected] = useState([]);
 
     // user auth
     const auth_link = `https://accounts.spotify.com/authorize?` + stringify({
@@ -55,30 +56,64 @@ export function SpotifyObsessions() {
         setLoading(false);
     }
 
+    const trackChecked = (event) => {
+        console.log(event.target.id);
+        let entry = {
+            "uri": `${event.target.id}`,
+            "name": `${event.target.value}`
+        }
+        if (event.target.checked) {
+            setSelected([...selected, entry]);
+        }
+        else {
+            setSelected(selected => selected.filter(item => item.uri !== entry.uri));
+        }
+    }
+
+    const exportObsessions = () => {
+        console.log("To be implemented!");
+    }
+
     return (<div className='widget obsessions'>
         <h2>Obsessions</h2>
         {!code ?
             <a href={auth_link}>Login to Spotify</a>
             : <div>
-                <button type="button" name="fetch" onClick={fetch}>Fetch</button>
+                <button name="fetch" onClick={fetch}>Fetch</button>
                 <button className="logout" onClick={logout}>Logout</button>
             </div>}
         {loading ? <p>Loading...</p> : <div></div>}
         <p>{error} </p>
         <div className="data">
             <div>
-                <h4>Your top tracks recently:</h4>
+                <div className='listheader'>
+                    <h4 className='listtitle'>Your top tracks recently:</h4>
+                </div>
                 <ul className='trackList'>
-                    {tracks ? tracks.map((track) => (
-                        <li key={track.id} className='track'>
-                            <input type="checkbox" id={track.id} value={track.name} />
-                            <label htmlFor={track.id} className="trackName">{track.name} - {track.artists[0].name}</label>
+                    {tracks && code ? tracks.map((track) => (
+                        <li key={track.uri} className='track'>
+                            <input type="checkbox" id={track.uri} value={`${track.name} - ${track.artists[0].name}`} onChange={trackChecked} />
+                            <label htmlFor={track.uri} className="trackName">
+                                {track.name} - {track.artists[0].name}
+                            </label>
                         </li>
                     )) : ""}
                 </ul>
             </div>
             <div className="selected">
-                <h4>Selected tracks:</h4>
+                <div className='listheader'>
+                    <h4 className='listtitle'>Selected tracks: {selected.length} </h4>
+                    {code ? <button className='export' onClick={exportObsessions}>Export</button> : ""}
+                </div>
+                <ul className='trackList'>
+                    {selected && tracks && code ? selected.map((track) => (
+                        <li key={track.uri} className='track'>
+                            <p className="trackName">
+                                {track.name}
+                            </p>
+                        </li>
+                    )) : ""}
+                </ul>
             </div>
         </div>
     </div>)
