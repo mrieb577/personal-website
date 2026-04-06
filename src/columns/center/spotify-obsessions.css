@@ -17,6 +17,11 @@ ul {
     margin: 0px;
 }
 
+.playlist {
+    list-style-type: decimal;
+    padding-left: 30px;
+}
+
 .data{
     display: grid;
     grid-template-columns: 50% 50%;
@@ -36,6 +41,10 @@ ul {
     align-items: center;
 }
 
+.playlistEntry {
+    margin-bottom: 5px;
+}
+
 .export {
     justify-self: end;
 }
@@ -43,4 +52,8 @@ ul {
 .trackName{
     padding-left: 10px;
     overflow-x: clip;
+}
+
+.warning {
+    font-size: 10pt;
 }
