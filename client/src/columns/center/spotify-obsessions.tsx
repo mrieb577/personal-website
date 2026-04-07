@@ -48,7 +48,7 @@ export function SpotifyObsessions() {
             window.localStorage.setItem("code", cd);
         }
         setCode(cd ?? ''); // save the code that is in the return url
-    }, []);
+    }, [get_vals]);
 
     const logout = () => {
         setCode("");
