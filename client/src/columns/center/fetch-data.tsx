@@ -80,6 +80,7 @@ async function fetchSpotifyData(cd: string, access_data : AccessData | null, end
     try {
         access_data = await verifyAccess(cd, access_data);
         if (!access_data) throw new Error("Unable to get access data, cannot fetch!");
+        console.log(access_data);
 
         const url = `https://api.spotify.com/v1/${endpoint}`;
         const response = await fetch(url, {
