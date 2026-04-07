@@ -4,7 +4,8 @@ import { verifyAccess, type AccessData } from "./fetch-data";
 const playlistName = "spotify-obsessions";
 const playlistDescription = "A playlist consisting of your current obsessions. Play it on loop or use it for suggestions, up to you! Generated using Spotify Obsessions.";
 
-async function getUserPlaylists(access_data: AccessData){
+async function getUserPlaylists(access_data: AccessData | null){
+    if (!access_data) throw new Error("Insufficient access data to get user playlists!");
     try {
         const chunk = 50;
         let off = 0;
@@ -38,7 +39,8 @@ async function getUserPlaylists(access_data: AccessData){
     }
 }
 
-async function createObsessionsPlaylist(access_data: AccessData){
+async function createObsessionsPlaylist(access_data: AccessData | null) {
+    if (!access_data) throw new Error("Insufficient access data to create the playlist!");
     try {
         const url = `https://api.spotify.com/v1/me/playlists`;
         const response = await fetch(url, {
@@ -62,7 +64,7 @@ async function createObsessionsPlaylist(access_data: AccessData){
     }
 }
 
-async function writeToPlaylist(cd: string, access_data: AccessData){
+async function writeToPlaylist(cd: string, access_data: AccessData | null){
     try {
         access_data = await verifyAccess(cd, access_data)
         //get existing playlist id

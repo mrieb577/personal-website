@@ -3,8 +3,8 @@ import { stringify } from 'querystring';
 
 export const CLIENT_ID = "28c075c91c8141dcb65598d301a7b9d8";
 const SECRET_ID = "05bc1edc3d30465bbb3e70f5865b95b3";
-export const REDIRECT_URI_IPV4 = "http://127.0.0.1:5173";
-export const REDIRECT_URI_IPV6 = "http://[::1]:5173";
+//export const REDIRECT_URI = "http://127.0.0.1:5173";
+export const REDIRECT_URI = "http://[::1]:5173";
 
 export type AccessData = {
     "access_token": null,
@@ -26,7 +26,7 @@ async function setupAccessToken(cd: string){
             body: stringify({
                 grant_type: 'authorization_code',
                 code: cd,
-                redirect_uri: REDIRECT_URI_IPV6,
+                redirect_uri: REDIRECT_URI,
             })
         });
         if (!response.ok) {
@@ -69,17 +69,18 @@ async function refreshAccessToken(cd: string, access_data : AccessData){
     }
 }
 
-export async function verifyAccess(cd: string, access_data : AccessData) {
-    if(!access_data || !access_data["access_token"]) 
+export async function verifyAccess(cd: string, access_data : AccessData | null) {
+    if(!access_data || !access_data["access_token"])
         return await setupAccessToken(cd);
-    if(Date.now() - access_data["grant_time"] >= access_data["expires_in"] * 1000) 
+    if(Date.now() - access_data["grant_time"] >= access_data["expires_in"] * 1000)
         return await refreshAccessToken(cd, access_data);
 }
 
-async function fetchSpotifyData(cd: string, access_data : AccessData, endpoint: string) {
+async function fetchSpotifyData(cd: string, access_data : AccessData | null, endpoint: string) {
     try {
         access_data = await verifyAccess(cd, access_data);
-        
+        if (!access_data) throw new Error("Unable to get access data, cannot fetch!");
+
         const url = `https://api.spotify.com/v1/${endpoint}`;
         const response = await fetch(url, {
             method: 'GET',

@@ -4,16 +4,18 @@ import './spotify-obsessions.css'
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { stringify } from 'querystring';
-import fetchSpotifyData, { type AccessData, CLIENT_ID, REDIRECT_URI_IPV4, REDIRECT_URI_IPV6 } from './fetch-data'
+import fetchSpotifyData, { type AccessData, CLIENT_ID, REDIRECT_URI } from './fetch-data'
 import writeToPlaylist from './write-data';
+import ListTrack from './list-track';
 
 const SCOPE = 'user-top-read user-read-private user-read-email playlist-modify-public';
+const max_selectable_items = 10;
 
-type Artist = {
+export type Artist = {
     name: string
 }
 
-type Track = {
+export type Track = {
     uri: string,
     name: string,
     artists: Artist[]
@@ -21,20 +23,20 @@ type Track = {
 
 export function SpotifyObsessions() {
     const [code, setCode] = useState("");
-    const [access_data, setAccessData] = useState();
+    const [access_data, setAccessData] = useState<AccessData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [get_vals] = useSearchParams();
 
     const [tracks, setTracks] = useState<Track[]>([]);
-    const [selected, setSelected] = useState([]);
+    const [selected, setSelected] = useState<Track[]>([]);
 
     // user auth
     const auth_link = `https://accounts.spotify.com/authorize?` + stringify({
         response_type: "code",
         client_id: CLIENT_ID,
         scope: SCOPE,
-        redirect_uri: REDIRECT_URI_IPV6
+        redirect_uri: REDIRECT_URI
     });
 
     useEffect(() => {
@@ -45,8 +47,8 @@ export function SpotifyObsessions() {
             cd = hash;
             window.localStorage.setItem("code", cd);
         }
-        setCode(cd); // save the code that is in the return url
-    }, []);
+        setCode(cd ?? ''); // save the code that is in the return url
+    }, [get_vals]);
 
     const logout = () => {
         setCode("");
@@ -71,10 +73,11 @@ export function SpotifyObsessions() {
         setLoading(false);
     }
 
-    const trackChecked = (event) => {
-        let entry = {
-            "uri": `${event.target.id}`,
-            "name": `${event.target.value}`
+    const trackChecked = (event : React.ChangeEvent<HTMLInputElement>) => {
+        const entry: Track = {
+            uri: `${event.target.id}`,
+            name: `${event.target.value}`,
+            artists: []
         }
         if (event.target.checked) {
             // add an item to the selected list
@@ -115,10 +118,7 @@ export function SpotifyObsessions() {
                 <ul className='trackList'>
                     {tracks && code ? tracks.map((track: Track) => (
                         <li key={track.uri} className='track'>
-                            <input type="checkbox" id={track.uri} value={`${track.name} - ${track.artists[0].name}`} onChange={trackChecked} />
-                            <label htmlFor={track.uri} className="trackName">
-                                {track.name} - {track.artists[0].name}
-                            </label>
+                            <ListTrack track={track} onCheckChanged={() => trackChecked} isFull={selected.length >= max_selectable_items}></ListTrack>
                         </li>
                     )) : ""}
                 </ul>
