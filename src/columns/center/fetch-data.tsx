@@ -3,8 +3,8 @@ import { stringify } from 'querystring';
 
 export const CLIENT_ID = "28c075c91c8141dcb65598d301a7b9d8";
 const SECRET_ID = "05bc1edc3d30465bbb3e70f5865b95b3";
-export const REDIRECT_URI_IPV4 = "http://127.0.0.1:5173";
-export const REDIRECT_URI_IPV6 = "http://[::1]:5173";
+//export const REDIRECT_URI = "http://127.0.0.1:5173";
+export const REDIRECT_URI = "http://[::1]:5173";
 
 export type AccessData = {
     "access_token": null,
@@ -26,7 +26,7 @@ async function setupAccessToken(cd: string){
             body: stringify({
                 grant_type: 'authorization_code',
                 code: cd,
-                redirect_uri: REDIRECT_URI_IPV4,
+                redirect_uri: REDIRECT_URI,
             })
         });
         if (!response.ok) {
