@@ -29,7 +29,7 @@ export function SpotifyObsessions() {
     const [get_vals] = useSearchParams();
 
     const [tracks, setTracks] = useState<Track[]>([]);
-    const [selected, setSelected] = useState([]);
+    const [selected, setSelected] = useState<Track[]>([]);
 
     // user auth
     const auth_link = `https://accounts.spotify.com/authorize?` + stringify({
@@ -47,7 +47,7 @@ export function SpotifyObsessions() {
             cd = hash;
             window.localStorage.setItem("code", cd);
         }
-        setCode(cd); // save the code that is in the return url
+        setCode(cd ?? ''); // save the code that is in the return url
     }, []);
 
     const logout = () => {
@@ -74,9 +74,10 @@ export function SpotifyObsessions() {
     }
 
     const trackChecked = (event : React.ChangeEvent<HTMLInputElement>) => {
-        const entry = {
+        const entry: Track = {
             uri: `${event.target.id}`,
-            name: `${event.target.value}`
+            name: `${event.target.value}`,
+            artists: []
         }
         if (event.target.checked) {
             // add an item to the selected list
@@ -117,7 +118,7 @@ export function SpotifyObsessions() {
                 <ul className='trackList'>
                     {tracks && code ? tracks.map((track: Track) => (
                         <li key={track.uri} className='track'>
-                            <ListTrack track={track} onCheckChanged={() => trackChecked}></ListTrack>
+                            <ListTrack track={track} onCheckChanged={() => trackChecked} isFull={selected.length >= max_selectable_items}></ListTrack>
                         </li>
                     )) : ""}
                 </ul>
