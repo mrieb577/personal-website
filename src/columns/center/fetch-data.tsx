@@ -26,7 +26,7 @@ async function setupAccessToken(cd: string){
             body: stringify({
                 grant_type: 'authorization_code',
                 code: cd,
-                redirect_uri: REDIRECT_URI_IPV6,
+                redirect_uri: REDIRECT_URI_IPV4,
             })
         });
         if (!response.ok) {
@@ -70,16 +70,16 @@ async function refreshAccessToken(cd: string, access_data : AccessData){
 }
 
 export async function verifyAccess(cd: string, access_data : AccessData) {
-    if(!access_data || !access_data["access_token"]) 
+    if(!access_data || !access_data["access_token"])
         return await setupAccessToken(cd);
-    if(Date.now() - access_data["grant_time"] >= access_data["expires_in"] * 1000) 
+    if(Date.now() - access_data["grant_time"] >= access_data["expires_in"] * 1000)
         return await refreshAccessToken(cd, access_data);
 }
 
 async function fetchSpotifyData(cd: string, access_data : AccessData, endpoint: string) {
     try {
         access_data = await verifyAccess(cd, access_data);
-        
+
         const url = `https://api.spotify.com/v1/${endpoint}`;
         const response = await fetch(url, {
             method: 'GET',
