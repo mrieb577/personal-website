@@ -69,14 +69,14 @@ async function refreshAccessToken(cd: string, access_data : AccessData){
     }
 }
 
-export async function verifyAccess(cd: string, access_data : AccessData) {
+export async function verifyAccess(cd: string, access_data : AccessData | null) {
     if(!access_data || !access_data["access_token"])
         return await setupAccessToken(cd);
     if(Date.now() - access_data["grant_time"] >= access_data["expires_in"] * 1000)
         return await refreshAccessToken(cd, access_data);
 }
 
-async function fetchSpotifyData(cd: string, access_data : AccessData, endpoint: string) {
+async function fetchSpotifyData(cd: string, access_data : AccessData | null, endpoint: string) {
     try {
         access_data = await verifyAccess(cd, access_data);
 

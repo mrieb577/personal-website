@@ -23,7 +23,7 @@ export type Track = {
 
 export function SpotifyObsessions() {
     const [code, setCode] = useState("");
-    const [access_data, setAccessData] = useState();
+    const [access_data, setAccessData] = useState<AccessData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [get_vals] = useSearchParams();
@@ -73,10 +73,10 @@ export function SpotifyObsessions() {
         setLoading(false);
     }
 
-    const trackChecked = (event) => {
-        let entry = {
-            "uri": `${event.target.id}`,
-            "name": `${event.target.value}`
+    const trackChecked = (event : React.ChangeEvent<HTMLInputElement>) => {
+        const entry = {
+            uri: `${event.target.id}`,
+            name: `${event.target.value}`
         }
         if (event.target.checked) {
             // add an item to the selected list
