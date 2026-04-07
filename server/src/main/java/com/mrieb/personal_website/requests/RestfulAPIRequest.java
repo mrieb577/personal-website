@@ -9,5 +9,5 @@ public abstract class RestfulAPIRequest {
         return requestType;
     }
 
-    public abstract void buildResponse() throws IOException;
+    public abstract void buildResponse() throws Exception;
 }
