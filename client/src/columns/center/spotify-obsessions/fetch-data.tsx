@@ -40,7 +40,7 @@ async function setupAccessToken(cd: string){
     }
 }
 
-async function refreshAccessToken(cd: string, access_data : AccessData){
+async function refreshAccessToken(cd: string, access_data : AccessData) : Promise<AccessData | null> {
     try{
         if(!cd) throw new Error("Code was not given!");
         if(!access_data["refresh_token"]) throw new Error("Access data was not given!");
@@ -67,20 +67,21 @@ async function refreshAccessToken(cd: string, access_data : AccessData){
     } catch (error) {
         console.error("Fetch error:", error);
     }
+    return null;
 }
 
-export async function verifyAccess(cd: string, access_data : AccessData | null) {
+export async function verifyAccess(cd: string, access_data : AccessData | null) : Promise<AccessData | null> {
     if(!access_data || !access_data["access_token"])
         return await setupAccessToken(cd);
     if(Date.now() - access_data["grant_time"] >= access_data["expires_in"] * 1000)
         return await refreshAccessToken(cd, access_data);
+    return access_data;
 }
 
-async function fetchSpotifyData(cd: string, access_data : AccessData | null, endpoint: string) {
+async function fetchSpotifyData(cd: string, access_data: AccessData | null, endpoint: string) {
     try {
         access_data = await verifyAccess(cd, access_data);
         if (!access_data) throw new Error("Unable to get access data, cannot fetch!");
-        console.log(access_data);
 
         const url = `https://api.spotify.com/v1/${endpoint}`;
         const response = await fetch(url, {
