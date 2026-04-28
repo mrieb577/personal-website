@@ -39,6 +39,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -62,25 +68,26 @@
                 </executions>
             </plugin>
             <plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>3.1.0</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>exec</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<executable>java</executable>
-						<arguments>
-							<argument>-classpath</argument>
-							<classpath/>
-							<argument>com.mrieb.personal_website.PWAPI</argument>
-						</arguments>
-					</configuration>
-				</plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>java</executable>
+                    <addResourcesToClasspath>true</addResourcesToClasspath>
+					<arguments>
+						<argument>-classpath</argument>
+						<classpath/>
+						<argument>com.mrieb.personal_website.PWAPI</argument>
+					</arguments>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 </project>

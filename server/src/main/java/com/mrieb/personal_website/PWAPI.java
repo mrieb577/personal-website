@@ -14,7 +14,10 @@ public class PWAPI {
 
     public static void main(String[] args) {
         try{
-            InputStream credsIS = PWAPI.class.getResourceAsStream("credentials.json");
+            ClassLoader loader = PWAPI.class.getClass().getClassLoader();
+            if(loader == null)
+                loader = ClassLoader.getSystemClassLoader();
+            InputStream credsIS = loader.getResourceAsStream("credentials.json");
             String credentialsJson = new String(credsIS.readAllBytes());
             State.credentials = new Gson().fromJson(credentialsJson, Credentials.class);
         } catch(IOException e){

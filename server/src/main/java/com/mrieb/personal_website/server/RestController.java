@@ -19,7 +19,7 @@ public class RestController {
     private static final int HTTP_BAD_REQUEST = 400;
     private static final int HTTP_SERVER_ERROR = 500;
     
-    private static Logger log = LoggerFactory.getLogger(RestController.class);
+    //private static Logger log = LoggerFactory.getLogger(RestController.class);
 
     private Gson gson;
 
@@ -45,13 +45,14 @@ public class RestController {
             Request requestObj = gson.fromJson(jsonString, requestType);
             requestObj.buildResponse();
             String jsonResponse = gson.toJson(requestObj);
-            log.trace("Response - {}", jsonResponse);
+            //log.trace("Response - {}", jsonResponse);
+            System.out.println("Response - " + jsonResponse);
             return jsonResponse;
         } catch (BadRequestException e) {
-            log.info("Bad Request - {}", e.getMessage());
+            System.out.println("Bad Request - " + e.getMessage());
             res.status(HTTP_BAD_REQUEST);
         } catch (Exception e) {
-            log.info("Server Error - ", e);
+            System.out.println("Server Error - " + e);
             res.status(HTTP_SERVER_ERROR);
         }
         return jsonString;
@@ -62,7 +63,7 @@ public class RestController {
     }
 
     private void logRequest(spark.Request request, spark.Response response) {
-		log.info(request.requestMethod() + " " + request.pathInfo() + "\nREQUEST:\n" + request.body() + "\nRESPONSE:\n"
+		System.out.println(request.requestMethod() + " " + request.pathInfo() + "\nREQUEST:\n" + request.body() + "\nRESPONSE:\n"
 				+ response.body());
 	}
 
@@ -72,7 +73,7 @@ public class RestController {
 		PrintWriter pw = new PrintWriter(sw);
 		exception.printStackTrace();
 		exception.printStackTrace(pw);
-		log.error(sw.toString());
+		System.err.println(sw.toString());
 		response.body("KO");
 		response.status(500);
 	}
