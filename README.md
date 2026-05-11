@@ -1,5 +1,5 @@
 run server:
-`mvn spring-boot:run`
+`mvn exec:exec`
 
 run client:
 `npm run dev`
