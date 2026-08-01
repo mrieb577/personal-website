@@ -26,3 +26,5 @@ dist-ssr
 # Server-side
 server/build/*
 server/.mvn/*
+server/src/main/resources/credentials.json
+abandoned/
