@@ -1,7 +1,9 @@
 import BlogEntry from "./blog-entry"
 
 export default function Blog() {
+    
+
     return (<div>
-        <BlogEntry />
+        <BlogEntry entry="Hello there"></BlogEntry>
     </div>)
 }
